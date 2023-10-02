@@ -1,12 +1,23 @@
 package com.alkan.monobackend.responses;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
+import com.alkan.monobackend.dtos.ProductDto;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import java.util.List;
 
 public class ProductResponse extends BaseResponse{
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    ProductDto data;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    List<ProductDto> dataList;
 
-    @Override
-    public ResponseEntity<Object> responseBuilder(String message, HttpStatus httpStatus, Object object) {
-        return super.responseBuilder(message, httpStatus, object);
+    public ProductResponse(int code, String message, ProductDto data) {
+        super(code, message);
+        this.data = data;
+    }
+    public ProductResponse(int code, String message, List<ProductDto> dataList) {
+        super(code, message);
+        this.dataList = dataList;
     }
 }

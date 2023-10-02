@@ -3,7 +3,8 @@ package com.alkan.monobackend.entities;
 import jakarta.persistence.*;
 
 @Entity
-public class Orders {
+@Table(name = "orders")
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;

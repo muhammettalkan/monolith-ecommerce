@@ -2,7 +2,8 @@ package com.alkan.monobackend.controllers;
 
 import com.alkan.monobackend.dtos.ShopDto;
 import com.alkan.monobackend.responses.ShopResponse;
-import com.alkan.monobackend.services.ShopService;
+import com.alkan.monobackend.services.serviceImpl.ShopServiceImpl;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,21 +12,20 @@ import java.util.List;
 @RequestMapping("/api/shop")
 public class ShopController {
 
-    private ShopService service;
+    private ShopServiceImpl service;
 
-    public ShopController(ShopService service) {
+    public ShopController(ShopServiceImpl service) {
         this.service = service;
     }
 
     @PostMapping("/create")
-    public ShopResponse create(@RequestBody ShopDto shopDto){
-        return service.create(shopDto);
+    public ResponseEntity<ShopResponse> create(@RequestBody ShopDto shopDto){
+        return ResponseEntity.ok(new ShopResponse(2000,"Shop created", service.create(shopDto)));
     }
     @GetMapping("/findAll")
-    public List<ShopDto> findAll(){
-        return service.findAll();
+    public ResponseEntity<ShopResponse> findAll(){
+        return ResponseEntity.ok(new ShopResponse(2000,"Shops found", service.findAll()));
     }
-
     @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable int id){
         return service.delete(id);

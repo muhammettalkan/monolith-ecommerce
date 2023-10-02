@@ -3,6 +3,7 @@ package com.alkan.monobackend.dtos;
 import java.io.Serializable;
 
 public class CustomerDto implements Serializable {
+    public int id;
     public String firstName;
     public String lastName;
     public String phoneNumber;

@@ -18,27 +18,27 @@ public class ShopAdminController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> findById(@PathVariable (value = "id") int id){
-        return service.find(id);
+    public ResponseEntity<ShopAdminResponse> findById(@PathVariable (value = "id") String id){
+        return ResponseEntity.ok(new ShopAdminResponse(2000,"Shop Admin Found",service.findShopAdminById(id)));
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Object> create(@RequestBody ShopAdminDto shopAdminDto){
-        return service.create(shopAdminDto);
+    public ResponseEntity<ShopAdminResponse> create(@RequestBody ShopAdminDto shopAdminDto){
+        return ResponseEntity.ok(new ShopAdminResponse(2000,"Shop Admin Created",service.create(shopAdminDto)));
     }
     @PutMapping("/update/{id}")
-    public ResponseEntity<Object> update(@PathVariable int id, @RequestBody ShopAdminDto shopAdminDto){
-        return service.update(id, shopAdminDto);
+    public ResponseEntity<ShopAdminResponse> update(@PathVariable String id, @RequestBody ShopAdminDto shopAdminDto){
+        return ResponseEntity.ok(new ShopAdminResponse(2000,"Shop Admin Updated",service.update(id, shopAdminDto)));
     }
 
     @DeleteMapping("/delete/{id}")
-    public String delete(@PathVariable int id){
+    public String delete(@PathVariable String id){
         return service.delete(id);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody LoginRequest loginRequest){
-        return service.login(loginRequest);
+    public ResponseEntity<ShopAdminResponse> login(@RequestBody LoginRequest loginRequest){
+        return ResponseEntity.ok(new ShopAdminResponse(2000,"Login Successful",service.login(loginRequest)));
     }
 
 }

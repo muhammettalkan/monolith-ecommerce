@@ -7,7 +7,6 @@ import java.util.List;
 
 @Entity
 public class Basket {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;

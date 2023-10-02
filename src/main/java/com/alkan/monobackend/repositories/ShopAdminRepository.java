@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ShopAdminRepository extends JpaRepository<ShopAdmin,Integer> {
     ShopAdmin findByEmailAndPassword(String email, String password);
+    boolean existsByEmail(String email);
 }
