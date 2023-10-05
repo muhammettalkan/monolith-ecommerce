@@ -7,7 +7,7 @@ import com.alkan.monobackend.request.LoginRequest;
 import java.util.List;
 
 public interface ShopAdminService {
-
+    ShopAdmin findById(int shopAdminId);
     ShopAdmin toEntity(ShopAdminDto dto);
     ShopAdminDto toDto(ShopAdmin shopAdmin);
     ShopAdminDto findShopAdminById(String id);
@@ -16,5 +16,4 @@ public interface ShopAdminService {
     ShopAdminDto create(ShopAdminDto shopAdminDto);
     String delete(String id);
     ShopAdminDto login(LoginRequest loginRequest);
-
 }

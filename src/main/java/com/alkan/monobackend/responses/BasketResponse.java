@@ -10,16 +10,16 @@ import java.util.List;
 public class BasketResponse extends BaseResponse{
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    BasketDto data;
+    public BasketDto basket;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    List<BasketDto> dataList;
-    public BasketResponse(int code, String message, BasketDto data) {
+    public List<BasketDto> basketList;
+    public BasketResponse(int code, String message, BasketDto basket) {
         super(code, message);
-        this.data = data;
+        this.data = basket;
     }
 
-    public BasketResponse(int code, String message, List<BasketDto> dataList) {
+    public BasketResponse(int code, String message, List<BasketDto> basketList) {
         super(code, message);
-        this.dataList = dataList;
+        this.basketList = basketList;
     }
 }

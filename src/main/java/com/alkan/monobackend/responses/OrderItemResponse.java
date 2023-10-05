@@ -1,23 +1,21 @@
 package com.alkan.monobackend.responses;
 
-
-import com.alkan.monobackend.dtos.ShopDto;
+import com.alkan.monobackend.dtos.OrderItemDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.List;
 
-public class ShopResponse extends BaseResponse{
+public class OrderItemResponse extends BaseResponse {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public ShopDto data;
+    public OrderItemDto data;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public List<ShopDto> dataList;
-
-    public ShopResponse(int code, String message, ShopDto data) {
+    public List<OrderItemDto> dataList;
+    public OrderItemResponse(int code, String message, OrderItemDto data) {
         super(code, message);
         this.data = data;
     }
-    public ShopResponse(int code, String message, List<ShopDto> dataList) {
+    public OrderItemResponse(int code, String message, List<OrderItemDto> dataList) {
         super(code, message);
         this.dataList = dataList;
     }

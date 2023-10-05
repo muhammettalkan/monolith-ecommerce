@@ -7,7 +7,7 @@ import com.alkan.monobackend.request.AddBasketProductToBasketRequest;
 import java.util.List;
 
 public interface BasketProductService {
-
+    BasketProduct findBasketProductById(int id);
     BasketProduct mapToEntity(BasketProductDto basketProductDto);
     BasketProductDto mapToDto(BasketProduct basketProduct);
     BasketProductDto addToBasket(AddBasketProductToBasketRequest request);

@@ -1,6 +1,10 @@
 package com.alkan.monobackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Customer {
@@ -13,6 +17,9 @@ public class Customer {
     private String email;
     private String password;
     private String address;
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @JsonBackReference
+    private List<Basket> basketList;
 
     public Customer() {
     }
@@ -83,4 +90,11 @@ public class Customer {
         this.address = address;
     }
 
+    public List<Basket> getBasketList() {
+        return basketList;
+    }
+
+    public void setBasketList(List<Basket> basketList) {
+        this.basketList = basketList;
+    }
 }

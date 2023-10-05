@@ -1,5 +1,6 @@
 package com.alkan.monobackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -20,13 +21,18 @@ public class Shop {
             joinColumns = @JoinColumn(name = "category_id"),
             inverseJoinColumns = @JoinColumn(name = "shop_id"))
     private List<Category> categoryList;
+    @JsonBackReference
+    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
+    private List<OrderItem> orderItemList;
     public Shop() {
     }
 
-    public Shop(int id, String shopName, ShopAdmin admin) {
+    public Shop(int id, String shopName, ShopAdmin admin, List<Category> categoryList, List<OrderItem> orderItemList) {
         this.id = id;
         this.shopName = shopName;
         this.admin = admin;
+        this.categoryList = categoryList;
+        this.orderItemList = orderItemList;
     }
 
     public int getId() {
@@ -51,5 +57,21 @@ public class Shop {
 
     public void setAdmin(ShopAdmin admin) {
         this.admin = admin;
+    }
+
+    public List<Category> getCategoryList() {
+        return categoryList;
+    }
+
+    public void setCategoryList(List<Category> categoryList) {
+        this.categoryList = categoryList;
+    }
+
+    public List<OrderItem> getOrderItemList() {
+        return orderItemList;
+    }
+
+    public void setOrderItemList(List<OrderItem> orderItemList) {
+        this.orderItemList = orderItemList;
     }
 }

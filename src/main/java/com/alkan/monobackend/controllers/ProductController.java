@@ -2,6 +2,7 @@ package com.alkan.monobackend.controllers;
 
 import com.alkan.monobackend.dtos.ProductDto;
 import com.alkan.monobackend.entities.Product;
+import com.alkan.monobackend.request.CreateProductRequest;
 import com.alkan.monobackend.responses.ProductResponse;
 import com.alkan.monobackend.services.ProductService;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/product")
+@RequestMapping("products")
 public class ProductController {
 
     private ProductService service;
@@ -20,8 +21,8 @@ public class ProductController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ProductResponse> create(@RequestBody ProductDto productDto){
-        return ResponseEntity.ok( new ProductResponse(2000,"Product created",service.create(productDto)));
+    public ResponseEntity<ProductResponse> create(@RequestBody CreateProductRequest request){
+        return ResponseEntity.ok( new ProductResponse(2000,"Product created",service.create(request)));
     }
 
     @GetMapping("/list")

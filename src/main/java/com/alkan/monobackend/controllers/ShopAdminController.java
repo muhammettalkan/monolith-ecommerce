@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/shopadmin")
+@RequestMapping("/shopadmins")
 public class ShopAdminController {
 
     private ShopAdminService service;

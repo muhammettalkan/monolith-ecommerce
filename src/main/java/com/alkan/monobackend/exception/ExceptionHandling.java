@@ -1,6 +1,8 @@
-package com.alkan.monobackend.exception.handler;
+package com.alkan.monobackend.exception;
 
 import com.alkan.monobackend.exception.custom.EmailHasBeenTakenAlreadyException;
+import com.alkan.monobackend.exception.custom.ObjectNotFoundException;
+import com.alkan.monobackend.exception.custom.ShopNameIsAlreadyInUse;
 import com.alkan.monobackend.responses.BaseResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,11 +27,18 @@ public class ExceptionHandling {
         ResponseEntity<Object> entity = new ResponseEntity<>(response, HttpStatus.OK);
         return entity;
     }
-    @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<Object> noSuchElementResponse(){
-        BaseResponse response = new BaseResponse(1004, "The object you are looking for does not exist", null);
+    @ExceptionHandler(ObjectNotFoundException.class)
+    public ResponseEntity<Object> objectNotFoundResponse(ObjectNotFoundException exception){
+        BaseResponse response = new BaseResponse(1004, exception.getMessage(), null);
         ResponseEntity<Object> entity = new ResponseEntity<>(response, HttpStatus.OK);
         return entity;
     }
+    @ExceptionHandler(ShopNameIsAlreadyInUse.class)
+    public ResponseEntity<Object> shopNameIsAlreadyInUseResponse(ShopNameIsAlreadyInUse exception){
+        BaseResponse response = new BaseResponse(1005, exception.getMessage(), null);
+        ResponseEntity<Object> entity = new ResponseEntity<>(response, HttpStatus.OK);
+        return entity;
+    }
+
 
 }

@@ -6,6 +6,7 @@ import com.alkan.monobackend.repositories.BasketProductRepository;
 import com.alkan.monobackend.request.AddBasketProductToBasketRequest;
 import com.alkan.monobackend.services.BasketProductService;
 import com.alkan.monobackend.services.BasketService;
+import com.alkan.monobackend.services.ProductService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -17,19 +18,21 @@ public class BasketProductServiceImpl implements BasketProductService {
 
     private BasketProductRepository repository;
     private BasketService basketService;
-    private ProductServiceImpl productServiceImpl;
-    public BasketProductServiceImpl(BasketProductRepository repository, @Lazy BasketServiceImpl basketService, @Lazy ProductServiceImpl productServiceImpl) {
+    private ProductService productService;
+    public BasketProductServiceImpl(BasketProductRepository repository, BasketServiceImpl basketService, ProductService productService) {
         this.repository = repository;
         this.basketService = basketService;
-        this.productServiceImpl = productServiceImpl;
+        this.productService = productService;
     }
-
+    public BasketProduct findBasketProductById(int id){
+        return repository.findById(id).get();
+    }
     public BasketProduct mapToEntity(BasketProductDto basketProductDto){
         BasketProduct basketProduct = new BasketProduct();
         basketProduct.setId(basketProductDto.id);
         basketProduct.setQuantity(basketProductDto.quantity);
         basketProduct.setBasket(basketService.mapDtoToEntity(basketService.findById(String.valueOf(basketProductDto.basketId))));
-        basketProduct.setProduct(productServiceImpl.findById(basketProductDto.productId));
+        basketProduct.setProduct(productService.toEntity(productService.findById(String.valueOf(basketProductDto.productId))));
         basketProduct.setAmount(basketProductDto.amount);
         return basketProduct;
     }
@@ -45,7 +48,7 @@ public class BasketProductServiceImpl implements BasketProductService {
     public BasketProductDto addToBasket(AddBasketProductToBasketRequest request){
         BasketProduct basketProduct = new BasketProduct();
         basketProduct.setQuantity(request.quantity);
-        basketProduct.setProduct(productServiceImpl.findById(request.productId));
+        basketProduct.setProduct(productService.toEntity(productService.findById(String.valueOf(request.productId))));
         basketProduct.setAmount(calculateBasketProductAmount(basketProduct.getProduct().getPrice(), basketProduct.getQuantity()));
         basketProduct.setBasket(basketService.mapDtoToEntity(basketService.findById(String.valueOf(request.basketId))));
         return mapToDto(repository.save(basketProduct));

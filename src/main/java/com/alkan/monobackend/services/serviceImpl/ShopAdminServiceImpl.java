@@ -3,6 +3,7 @@ package com.alkan.monobackend.services.serviceImpl;
 import com.alkan.monobackend.dtos.ShopAdminDto;
 import com.alkan.monobackend.entities.ShopAdmin;
 import com.alkan.monobackend.exception.custom.EmailHasBeenTakenAlreadyException;
+import com.alkan.monobackend.exception.custom.ObjectNotFoundException;
 import com.alkan.monobackend.repositories.ShopAdminRepository;
 import com.alkan.monobackend.request.LoginRequest;
 import com.alkan.monobackend.services.ShopAdminService;
@@ -19,6 +20,9 @@ public class ShopAdminServiceImpl implements ShopAdminService {
         this.repository = repository;
     }
 
+    public ShopAdmin findById(int shopAdminId) {
+        return repository.findById(shopAdminId).get();
+    }
     public ShopAdminDto toDto(ShopAdmin shopAdmin){
         ShopAdminDto dto = new ShopAdminDto();
         dto.id = shopAdmin.getId();
@@ -72,8 +76,11 @@ public class ShopAdminServiceImpl implements ShopAdminService {
         return "Shop Admin with id " + id + " is deleted";
     }
     public ShopAdminDto login(LoginRequest loginRequest) {
-        ShopAdminDto shopAdminDto = toDto(repository.findByEmailAndPassword(loginRequest.getEmail(),loginRequest.getPassword()));
-        return shopAdminDto;
+        ShopAdmin shopAdmin = repository.findByEmailAndPassword(loginRequest.getEmail(),loginRequest.getPassword());
+        if (shopAdmin == null){
+            throw new ObjectNotFoundException("Invalid email or password");
+        }
+        return toDto(shopAdmin);
     }
 
 

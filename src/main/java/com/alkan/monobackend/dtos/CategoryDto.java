@@ -9,13 +9,15 @@ public class CategoryDto implements Serializable {
 
     public String name;
     public List<ProductDto> productDtoList;
+    public List<ShopDto> shopDtoList;
     public CategoryDto() {
     }
 
-    public CategoryDto(int id, String categoryDtoName, List<ProductDto> productDtos) {
+    public CategoryDto(int id, String categoryDtoName, List<ProductDto> productDtoList, List<ShopDto> shopDtoList) {
         this.id = id;
         this.name = name;
-        this.productDtoList = productDtos;
+        this.productDtoList = productDtoList;
+        this.shopDtoList = shopDtoList;
     }
 
 }

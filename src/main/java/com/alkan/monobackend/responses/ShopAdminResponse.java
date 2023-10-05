@@ -10,9 +10,9 @@ import java.util.List;
 public class ShopAdminResponse extends BaseResponse{
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    ShopAdminDto data;
+    public ShopAdminDto data;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    List<ShopAdminDto> dataList;
+    public List<ShopAdminDto> dataList;
 
     public ShopAdminResponse(int code, String message, ShopAdminDto data) {
         super(code, message);

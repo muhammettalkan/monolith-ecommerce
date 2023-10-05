@@ -4,6 +4,8 @@ import com.alkan.monobackend.dtos.CustomerDto;
 import com.alkan.monobackend.entities.Customer;
 import com.alkan.monobackend.exception.custom.EmailHasBeenTakenAlreadyException;
 import com.alkan.monobackend.repositories.CustomerRepository;
+import com.alkan.monobackend.services.BasketService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +15,10 @@ import java.util.NoSuchElementException;
 public class CustomerServiceImpl implements com.alkan.monobackend.services.CustomerService {
 
     private final CustomerRepository repository;
-    public CustomerServiceImpl(CustomerRepository repository) {
+    private final BasketService basketService;
+    public CustomerServiceImpl(CustomerRepository repository,@Lazy BasketService basketService) {
         this.repository = repository;
+        this.basketService = basketService;
     }
     public CustomerDto toDto(Customer customer) {
         CustomerDto dto = new CustomerDto();
@@ -42,10 +46,12 @@ public class CustomerServiceImpl implements com.alkan.monobackend.services.Custo
         return toDto(repository.findById(Integer.parseInt(id)).get());
     }
     public CustomerDto register(CustomerDto customerDto) {
-        if (repository.existsByEmail(customerDto.email)){
-            throw new EmailHasBeenTakenAlreadyException("Email has been taken already");
+        if (repository.existsCustomerByEmail(customerDto.email)){
+            throw new EmailHasBeenTakenAlreadyException("This email has been taken already");
         }
-        return toDto(repository.save(toEntity(customerDto)));
+        Customer customer = toEntity(customerDto);
+        repository.save(customer);
+        return toDto(customer);
     }
     public List<CustomerDto> findAll(){
         if (repository.findAll().isEmpty()){

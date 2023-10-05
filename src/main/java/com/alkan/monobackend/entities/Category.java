@@ -19,10 +19,11 @@ public class Category {
     public Category() {
     }
 
-    public Category(int id, String name, List<Product> productList) {
+    public Category(int id, String name, List<Product> productList, List<Shop> shopList) {
         this.id = id;
         this.name = name;
         this.productList = productList;
+        this.shopList = shopList;
     }
 
     public int getId() {
@@ -47,5 +48,13 @@ public class Category {
 
     public void setProductList(List<Product> productList) {
         this.productList = productList;
+    }
+
+    public List<Shop> getShopList() {
+        return shopList;
+    }
+
+    public void setShopList(List<Shop> shopList) {
+        this.shopList = shopList;
     }
 }

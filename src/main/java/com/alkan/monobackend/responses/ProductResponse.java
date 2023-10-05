@@ -8,9 +8,9 @@ import java.util.List;
 
 public class ProductResponse extends BaseResponse{
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    ProductDto data;
+    public ProductDto data;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    List<ProductDto> dataList;
+    public List<ProductDto> dataList;
 
     public ProductResponse(int code, String message, ProductDto data) {
         super(code, message);
