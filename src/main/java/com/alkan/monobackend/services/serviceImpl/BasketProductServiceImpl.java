@@ -19,7 +19,7 @@ public class BasketProductServiceImpl implements BasketProductService {
     private BasketProductRepository repository;
     private BasketService basketService;
     private ProductService productService;
-    public BasketProductServiceImpl(BasketProductRepository repository, BasketServiceImpl basketService, ProductService productService) {
+    public BasketProductServiceImpl(BasketProductRepository repository,@Lazy BasketService basketService, @Lazy ProductService productService) {
         this.repository = repository;
         this.basketService = basketService;
         this.productService = productService;

@@ -4,8 +4,9 @@ import com.alkan.monobackend.dtos.ProductDto;
 import com.alkan.monobackend.entities.Product;
 import com.alkan.monobackend.repositories.ProductRepository;
 import com.alkan.monobackend.request.CreateProductRequest;
-import com.alkan.monobackend.services.CategoryService;
+import com.alkan.monobackend.services.BasketProductService;
 import com.alkan.monobackend.services.ProductService;
+import com.alkan.monobackend.services.ShopCategoryService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +16,13 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
     private ProductRepository repository;
-    private CategoryService categoryService;
+    private ShopCategoryService shopCategoryService;
+    private BasketProductService basketProductService;
 
-    public ProductServiceImpl(ProductRepository repository,@Lazy CategoryService categoryService) {
+    public ProductServiceImpl(ProductRepository repository,@Lazy ShopCategoryService shopCategoryService, BasketProductService basketProductService) {
         this.repository = repository;
-        this.categoryService = categoryService;
+        this.shopCategoryService = shopCategoryService;
+        this.basketProductService = basketProductService;
     }
     public Product findProductById(int id){
         return repository.findById(id).get();
@@ -30,7 +33,14 @@ public class ProductServiceImpl implements ProductService {
         product.setId(productDto.id);
         product.setName(productDto.name);
         product.setPrice(productDto.price);
-        product.setCategory(categoryService.toEntity(categoryService.findById(String.valueOf(productDto.categoryId))));
+        product.setShopCategory(shopCategoryService.findShopCategoryById(productDto.shopCategoryId));
+        if (productDto.basketProductDtoList != null){
+            product.setBasketProductList(productDto.basketProductDtoList
+                    .stream()
+                    .map(basketProductService::mapToEntity)
+                    .toList());
+        }
+        else product.setBasketProductList(null);
         return product;
     }
     public ProductDto toDto(Product product) {
@@ -38,15 +48,22 @@ public class ProductServiceImpl implements ProductService {
         productDto.id = product.getId();
         productDto.name = product.getName();
         productDto.price = product.getPrice();
-        productDto.categoryId = product.getCategory().getId();
+        productDto.shopCategoryId = product.getShopCategory().getId();
+        if (product.getBasketProductList() != null){
+            productDto.basketProductDtoList = product.getBasketProductList()
+                    .stream()
+                    .map(basketProductService::mapToDto)
+                    .toList();
+        }
+        else productDto.basketProductDtoList = null;
         return productDto;
     }
 
-    public ProductDto create(CreateProductRequest request){
+    public ProductDto addProductToShop(CreateProductRequest request){
         Product product = new Product();
         product.setName(request.name);
         product.setPrice(request.price);
-        product.setCategory(categoryService.findById(request.categoryId));
+        product.setShopCategory(shopCategoryService.findShopCategoryById(request.shopCategoryId));
         repository.save(product);
         return toDto(product);
     }
@@ -64,8 +81,9 @@ public class ProductServiceImpl implements ProductService {
         return toDto(repository.findById(Integer.parseInt(id)).get());
     }
 
+    @Override
     public List<ProductDto> findByCategoryId(String id) {
-        return repository.findByCategoryId(Integer.parseInt(id)).stream().map(this::toDto).toList();
+        return repository.findAllByShopCategoryId(Integer.parseInt(id)).stream().map(this::toDto).toList();
     }
 
 }

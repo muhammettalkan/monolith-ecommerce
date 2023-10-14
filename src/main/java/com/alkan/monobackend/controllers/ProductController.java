@@ -22,14 +22,12 @@ public class ProductController {
 
     @PostMapping("/create")
     public ResponseEntity<ProductResponse> create(@RequestBody CreateProductRequest request){
-        return ResponseEntity.ok( new ProductResponse(2000,"Product created",service.create(request)));
+        return ResponseEntity.ok( new ProductResponse(2000,"Product created",service.addProductToShop(request)));
     }
-
     @GetMapping("/list")
     public ResponseEntity<ProductResponse> list(){
         return ResponseEntity.ok(new ProductResponse(2000,"Products found",service.getAll()));
     }
-
     @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable String id){
         return service.delete(id);

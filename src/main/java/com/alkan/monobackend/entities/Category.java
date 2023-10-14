@@ -12,18 +12,15 @@ public class Category {
     private int id;
     private String name;
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private List<Product> productList;
-    @ManyToMany(mappedBy = "categoryList")
-    private List<Shop> shopList;
+    private List<ShopCategory> shopCategoryList;
 
     public Category() {
     }
 
-    public Category(int id, String name, List<Product> productList, List<Shop> shopList) {
+    public Category(int id, String name, List<ShopCategory> shopCategoryList) {
         this.id = id;
         this.name = name;
-        this.productList = productList;
-        this.shopList = shopList;
+        this.shopCategoryList = shopCategoryList;
     }
 
     public int getId() {
@@ -42,19 +39,11 @@ public class Category {
         this.name = name;
     }
 
-    public List<Product> getProductList() {
-        return productList;
+    public List<ShopCategory> getShopCategoryList() {
+        return shopCategoryList;
     }
 
-    public void setProductList(List<Product> productList) {
-        this.productList = productList;
-    }
-
-    public List<Shop> getShopList() {
-        return shopList;
-    }
-
-    public void setShopList(List<Shop> shopList) {
-        this.shopList = shopList;
+    public void setShopCategoryList(List<ShopCategory> shopCategoryList) {
+        this.shopCategoryList = shopCategoryList;
     }
 }

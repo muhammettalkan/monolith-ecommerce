@@ -4,6 +4,7 @@ import com.alkan.monobackend.dtos.CustomerDto;
 import com.alkan.monobackend.entities.Customer;
 import com.alkan.monobackend.exception.custom.EmailHasBeenTakenAlreadyException;
 import com.alkan.monobackend.repositories.CustomerRepository;
+import com.alkan.monobackend.request.LoginRequest;
 import com.alkan.monobackend.services.BasketService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,8 @@ import java.util.NoSuchElementException;
 public class CustomerServiceImpl implements com.alkan.monobackend.services.CustomerService {
 
     private final CustomerRepository repository;
-    private final BasketService basketService;
-    public CustomerServiceImpl(CustomerRepository repository,@Lazy BasketService basketService) {
+    public CustomerServiceImpl(CustomerRepository repository) {
         this.repository = repository;
-        this.basketService = basketService;
     }
     public CustomerDto toDto(Customer customer) {
         CustomerDto dto = new CustomerDto();
@@ -76,5 +75,12 @@ public class CustomerServiceImpl implements com.alkan.monobackend.services.Custo
         return "Customer is deleted";
     }
 
+    public CustomerDto login(LoginRequest request){
+        Customer customer = repository.findByEmail(request.getEmail());
+        if (customer == null){
+            throw new NoSuchElementException("Email or password is wrong");
+        }
+        return toDto(customer);
+    }
 
 }

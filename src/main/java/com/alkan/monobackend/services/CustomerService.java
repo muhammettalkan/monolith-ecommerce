@@ -2,6 +2,7 @@ package com.alkan.monobackend.services;
 
 import com.alkan.monobackend.dtos.CustomerDto;
 import com.alkan.monobackend.entities.Customer;
+import com.alkan.monobackend.request.LoginRequest;
 
 import java.util.List;
 
@@ -14,4 +15,5 @@ public interface CustomerService {
     List<CustomerDto> findAll();
     CustomerDto updateProfile(String id, CustomerDto customerDto);
     String delete(String id);
+    CustomerDto login(LoginRequest request);
 }

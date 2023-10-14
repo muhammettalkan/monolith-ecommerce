@@ -1,6 +1,7 @@
 package com.alkan.monobackend.controllers;
 
 import com.alkan.monobackend.dtos.CustomerDto;
+import com.alkan.monobackend.request.LoginRequest;
 import com.alkan.monobackend.responses.CustomerResponse;
 import com.alkan.monobackend.services.CustomerService;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class CustomerController {
         return ResponseEntity.ok(new CustomerResponse(2000,"Registered successfully",service.register(customerDto)));
     }
 
-    @GetMapping("/findall")
+    @GetMapping("/find-all")
     public ResponseEntity<CustomerResponse> list(){
         return ResponseEntity.ok(new CustomerResponse(2000, "Customers found", service.findAll()));
     }
@@ -39,6 +40,10 @@ public class CustomerController {
     @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable String id){
         return service.delete(id);
+    }
+    @PostMapping("/login")
+    public ResponseEntity<CustomerResponse> login(@RequestBody LoginRequest loginRequest){
+        return ResponseEntity.ok(new CustomerResponse(2000, "Customer logged in", service.login(loginRequest)));
     }
 
 

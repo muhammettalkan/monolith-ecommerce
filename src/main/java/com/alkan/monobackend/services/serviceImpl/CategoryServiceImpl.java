@@ -3,10 +3,9 @@ package com.alkan.monobackend.services.serviceImpl;
 import com.alkan.monobackend.dtos.CategoryDto;
 import com.alkan.monobackend.entities.Category;
 import com.alkan.monobackend.repositories.CategoryRepository;
+import com.alkan.monobackend.request.UpdateCategoryRequest;
 import com.alkan.monobackend.services.CategoryService;
-import com.alkan.monobackend.services.ProductService;
-import com.alkan.monobackend.services.ShopService;
-import org.springframework.context.annotation.Lazy;
+import com.alkan.monobackend.services.ShopCategoryService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,13 +14,11 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository repository;
-    private final ProductService productService;
-    private final ShopService shopService;
+    private final ShopCategoryService shopCategoryService;
 
-    public CategoryServiceImpl(CategoryRepository repository, ProductService productService, ShopService shopService) {
+    public CategoryServiceImpl(CategoryRepository repository, ShopCategoryService shopCategoryService) {
         this.repository = repository;
-        this.productService = productService;
-        this.shopService = shopService;
+        this.shopCategoryService = shopCategoryService;
     }
     public Category findById(int id) {
         return repository.findById(id).get();
@@ -31,14 +28,12 @@ public class CategoryServiceImpl implements CategoryService {
         Category category=new Category();
         category.setId(categoryDto.id);
         category.setName(categoryDto.name);
-        category.setProductList(categoryDto.productDtoList
-                .stream()
-                .map(productService::toEntity)
-                .toList());
-        category.setShopList(categoryDto.shopDtoList
-                .stream()
-                .map(shopService::toEntity)
-                .toList());
+        if (categoryDto.shopCategoryDtoList != null) {
+            category.setShopCategoryList(categoryDto.shopCategoryDtoList
+                    .stream()
+                    .map(shopCategoryService::toEntity)
+                    .toList());
+        }else category.setShopCategoryList(null);
         return category;
     }
 
@@ -46,14 +41,25 @@ public class CategoryServiceImpl implements CategoryService {
         CategoryDto categoryDto = new CategoryDto();
         categoryDto.id = category.getId();
         categoryDto.name = category.getName();
-        categoryDto.productDtoList = productService.findByCategoryId(String.valueOf(category.getId()));
-//        categoryDto.shopDtoList = shopService.findByCategoryId(String.valueOf(category.getId()));
+        if (category.getShopCategoryList() != null) {
+            categoryDto.shopCategoryDtoList = category.getShopCategoryList()
+                    .stream()
+                    .map(shopCategoryService::toDto)
+                    .toList();
+        }else categoryDto.shopCategoryDtoList = null;
         return categoryDto;
     }
 
     public CategoryDto create(String name) {
         Category category = new Category();
         category.setName(name);
+        repository.save(category);
+        return toDto(category);
+    }
+    @Override
+    public CategoryDto update(UpdateCategoryRequest request) {
+        Category category = repository.findById(request.id).get();
+        category.setName(request.name);
         repository.save(category);
         return toDto(category);
     }

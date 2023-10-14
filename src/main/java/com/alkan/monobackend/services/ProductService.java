@@ -14,7 +14,7 @@ public interface ProductService {
 
     ProductDto toDto(Product product);
 
-    ProductDto create(CreateProductRequest request);
+    ProductDto addProductToShop(CreateProductRequest request);
 
     List<ProductDto> getAll();
 
@@ -23,5 +23,4 @@ public interface ProductService {
     ProductDto findById(String id);
 
     List<ProductDto> findByCategoryId(String id);
-
 }

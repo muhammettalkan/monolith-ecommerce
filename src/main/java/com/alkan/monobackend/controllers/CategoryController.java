@@ -1,9 +1,8 @@
 package com.alkan.monobackend.controllers;
 
-import com.alkan.monobackend.dtos.CategoryDto;
+import com.alkan.monobackend.request.UpdateCategoryRequest;
 import com.alkan.monobackend.responses.CategoryResponse;
 import com.alkan.monobackend.services.CategoryService;
-import com.alkan.monobackend.services.serviceImpl.CategoryServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +16,7 @@ public class CategoryController {
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<CategoryResponse> getAll() {
         return ResponseEntity.ok(new CategoryResponse(2000, "Categories found", categoryService.findAll()));
     }
@@ -28,6 +27,10 @@ public class CategoryController {
     @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable String id) {
         return categoryService.delete(id);
+    }
+    @PutMapping("/update")
+    public ResponseEntity<CategoryResponse> update(@RequestBody UpdateCategoryRequest request) {
+        return ResponseEntity.ok(new CategoryResponse(2000, "Category updated", categoryService.update(request)));
     }
 
 }

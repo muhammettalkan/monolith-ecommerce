@@ -13,7 +13,7 @@ public class BasketProduct {
     @JsonManagedReference
     @JoinColumn(name = "basket_id")
     private Basket basket;
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
     private Product product;
     private int quantity;

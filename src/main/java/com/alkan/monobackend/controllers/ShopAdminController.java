@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/shopadmins")
+@RequestMapping("/shop-admins")
 public class ShopAdminController {
 
     private ShopAdminService service;
@@ -38,7 +38,7 @@ public class ShopAdminController {
 
     @PostMapping("/login")
     public ResponseEntity<ShopAdminResponse> login(@RequestBody LoginRequest loginRequest){
-        return ResponseEntity.ok(new ShopAdminResponse(2000,"Login Successful",service.login(loginRequest)));
+        return ResponseEntity.ok(new ShopAdminResponse(2000,"Successfully logged in!",service.login(loginRequest)));
     }
 
 }

@@ -6,6 +6,7 @@ import com.alkan.monobackend.entities.BasketProduct;
 import com.alkan.monobackend.exception.custom.ObjectNotFoundException;
 import com.alkan.monobackend.repositories.BasketRepository;
 import com.alkan.monobackend.request.AddBasketProductToBasketRequest;
+import com.alkan.monobackend.request.UpdateBasketProductRequest;
 import com.alkan.monobackend.services.BasketProductService;
 import com.alkan.monobackend.services.BasketService;
 import com.alkan.monobackend.services.CustomerService;
@@ -90,20 +91,22 @@ public class BasketServiceImpl implements BasketService {
     }
     public double calculateTotalAmount(int basketId){
         Basket basket = findBasketById(basketId);
-        double totalAmount = basket.getTotalAmount();
-        for (int i = 0; i < basket.getBasketProductList().size(); i++) {
-            totalAmount += basket.getBasketProductList().get(i).getProduct().getPrice() * basket.getBasketProductList().get(i).getQuantity();
+        double totalAmount = 0;
+        for (BasketProduct basketProduct: basket.getBasketProductList()) {
+            totalAmount += basketProduct.getAmount();
         }
         return totalAmount;
     }
-    public BasketDto update(String customerId,BasketDto basketDto){
-        Basket basket = mapDtoToEntity(findById(String.valueOf(basketDto.id)));
-        basket.setCustomer(customerService.toEntity(customerService.findById(customerId)));
+    public BasketDto update(UpdateBasketProductRequest request){
+        BasketProduct basketProduct = basketProductService.findBasketProductById(request.basketProductId);
+        basketProduct.setQuantity(request.quantity);
+        basketProduct.setAmount(basketProductService.calculateBasketProductAmount(basketProduct.getProduct().getPrice(), request.quantity));
+        Basket basket = findBasketById(showCurrentBasket(String.valueOf(request.customerId)).id);
         basket.setTotalAmount(calculateTotalAmount(basket.getId()));
         return mapEntityToDto(repository.save(basket));
     }
 
-    public BasketDto addOrRemoveBasketProduct(AddBasketProductToBasketRequest request){
+    public BasketDto addBasketProduct(AddBasketProductToBasketRequest request){
         Basket basket = findBasketById(request.basketId);
         BasketProduct basketProduct = new BasketProduct();
         basketProduct.setBasket(basket);
@@ -130,5 +133,34 @@ public class BasketServiceImpl implements BasketService {
         throw new ObjectNotFoundException("There is no current basket");
     }
 
+    @Override
+    public BasketDto increaseProductQuantityByOne(int basketProductId){
+        BasketProduct basketProduct = basketProductService.findBasketProductById(basketProductId);
+        basketProduct.setQuantity(basketProduct.getQuantity() + 1);
+        basketProduct.setAmount(basketProductService.calculateBasketProductAmount(basketProduct.getProduct().getPrice(), basketProduct.getQuantity()));
+        Basket basket = findBasketById(basketProduct.getBasket().getId());
+        basket.setTotalAmount(calculateTotalAmount(basket.getId()));
+        return mapEntityToDto(repository.save(basket));
+    }
+    @Override
+    public BasketDto decreaseProductQuantityByOne(int basketProductId){
+        BasketProduct basketProduct = basketProductService.findBasketProductById(basketProductId);
+        if (basketProduct.getQuantity() == 1){
+            basketProductService.delete(String.valueOf(basketProductId));
+            return mapEntityToDto(findBasketById(basketProduct.getBasket().getId()));
+        }
+        basketProduct.setQuantity(basketProduct.getQuantity() - 1);
+        basketProduct.setAmount(basketProductService.calculateBasketProductAmount(basketProduct.getProduct().getPrice(), basketProduct.getQuantity()));
+        Basket basket = findBasketById(basketProduct.getBasket().getId());
+        basket.setTotalAmount(calculateTotalAmount(basket.getId()));
+        return mapEntityToDto(repository.save(basket));
+    }
+
+    public String order(int id){
+        Basket basket = findBasketById(id);
+        basket.setOrdered(true);
+        repository.save(basket);
+        return "Order created";
+    }
 
 }

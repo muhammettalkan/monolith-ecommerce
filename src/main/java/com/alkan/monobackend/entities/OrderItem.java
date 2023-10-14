@@ -12,6 +12,10 @@ public class OrderItem {
     @OneToOne(cascade = CascadeType.ALL)
     private BasketProduct basketProduct;
     private boolean isGivenCargo = false;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonManagedReference
+    @JoinColumn(name = "order_id")
+    private Order order;
     @ManyToOne
     @JsonManagedReference
     @JoinColumn(name = "shop_id")
@@ -19,11 +23,12 @@ public class OrderItem {
 
     public OrderItem() {
     }
-    public OrderItem(int id, BasketProduct basketProduct, boolean isGivenCargo, Shop shop) {
+    public OrderItem(int id, BasketProduct basketProduct, boolean isGivenCargo, Shop shop, Order order) {
         this.id = id;
         this.basketProduct = basketProduct;
         this.isGivenCargo = isGivenCargo;
         this.shop = shop;
+        this.order = order;
     }
 
     public int getId() {
@@ -56,5 +61,13 @@ public class OrderItem {
 
     public void setShop(Shop shop) {
         this.shop = shop;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 }

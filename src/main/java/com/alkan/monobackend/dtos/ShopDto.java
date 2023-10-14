@@ -1,6 +1,5 @@
 package com.alkan.monobackend.dtos;
 
-import com.alkan.monobackend.entities.OrderItem;
 
 import java.io.Serializable;
 import java.util.List;
@@ -8,19 +7,19 @@ import java.util.List;
 public class ShopDto implements Serializable {
 
     public int id;
-    public String shopName;
+    public String name;
     public int shopAdminId;
-    public List<CategoryDto> categoryList;
-    public List<OrderItemDto> orderItemList;
+    public List<ShopCategoryDto> categoryList;
+    public List<OrderDto> orderList;
 
     public ShopDto() {
     }
 
-    public ShopDto(int id, String shopName, int shopAdminId, List<CategoryDto> categoryList, List<OrderItemDto> orderItemList) {
+    public ShopDto(int id, String name, int shopAdminId, List<ShopCategoryDto> categoryList, List<OrderDto> orderList) {
         this.id = id;
-        this.shopName = shopName;
+        this.name = name;
         this.shopAdminId = shopAdminId;
         this.categoryList = categoryList;
-        this.orderItemList = orderItemList;
+        this.orderList = orderList;
     }
 }

@@ -5,10 +5,10 @@ import com.alkan.monobackend.entities.OrderItem;
 
 public interface OrderItemService {
 
-    OrderItem findById(int id);
-
+    OrderItem findOrderItemById(int id);
     OrderItem toEntity(OrderItemDto orderItemDto);
-
     OrderItemDto toDto(OrderItem orderItem);
+    OrderItemDto findById(int id);
 
+    OrderItemDto save(OrderItem orderItem);
 }

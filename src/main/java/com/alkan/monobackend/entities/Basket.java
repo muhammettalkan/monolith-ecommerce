@@ -23,7 +23,6 @@ public class Basket {
     @OneToMany(mappedBy = "basket",cascade = CascadeType.ALL)
     @Nullable
     private List<BasketProduct> basketProductList;
-
     public Basket() {
     }
 
@@ -83,4 +82,6 @@ public class Basket {
     public void setOrdered(boolean ordered) {
         isOrdered = ordered;
     }
+
+
 }

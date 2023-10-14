@@ -11,28 +11,25 @@ public class Shop {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private String shopName;
+    private String name;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "shop_admin_id")
     private ShopAdmin admin;
-    @ManyToMany
-    @JoinTable(
-            name = "shop_category",
-            joinColumns = @JoinColumn(name = "category_id"),
-            inverseJoinColumns = @JoinColumn(name = "shop_id"))
-    private List<Category> categoryList;
+    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
+    @JsonBackReference
+    private List<ShopCategory> categoryList;
     @JsonBackReference
     @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
-    private List<OrderItem> orderItemList;
+    private List<Order> orderList;
     public Shop() {
     }
 
-    public Shop(int id, String shopName, ShopAdmin admin, List<Category> categoryList, List<OrderItem> orderItemList) {
+    public Shop(int id, String name, ShopAdmin admin, List<Order> orderList, List<ShopCategory> categoryList) {
         this.id = id;
-        this.shopName = shopName;
+        this.name = name;
         this.admin = admin;
+        this.orderList = orderList;
         this.categoryList = categoryList;
-        this.orderItemList = orderItemList;
     }
 
     public int getId() {
@@ -43,12 +40,12 @@ public class Shop {
         this.id = id;
     }
 
-    public String getShopName() {
-        return shopName;
+    public String getName() {
+        return name;
     }
 
-    public void setShopName(String shopName) {
-        this.shopName = shopName;
+    public void setName(String shopName) {
+        this.name = shopName;
     }
 
     public ShopAdmin getAdmin() {
@@ -59,19 +56,19 @@ public class Shop {
         this.admin = admin;
     }
 
-    public List<Category> getCategoryList() {
+    public List<ShopCategory> getCategoryList() {
         return categoryList;
     }
 
-    public void setCategoryList(List<Category> categoryList) {
+    public void setCategoryList(List<ShopCategory> categoryList) {
         this.categoryList = categoryList;
     }
 
-    public List<OrderItem> getOrderItemList() {
-        return orderItemList;
+    public List<Order> getOrderList() {
+        return orderList;
     }
 
-    public void setOrderItemList(List<OrderItem> orderItemList) {
-        this.orderItemList = orderItemList;
+    public void setOrderList(List<Order> orderList) {
+        this.orderList = orderList;
     }
 }

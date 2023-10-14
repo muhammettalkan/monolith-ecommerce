@@ -21,7 +21,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         this.shopService = shopService;
     }
 
-    public OrderItem findById(int id){
+    public OrderItem findOrderItemById(int id){
         return repository.findById(id).orElseThrow(()-> new ObjectNotFoundException("OrderItem not found with id: " + id));
     }
     public OrderItem toEntity(OrderItemDto orderItemDto){
@@ -39,6 +39,13 @@ public class OrderItemServiceImpl implements OrderItemService {
         orderItemDto.basketProductId = orderItem.getBasketProduct().getId();
         orderItemDto.shopId = orderItem.getShop().getId();
         return orderItemDto;
+    }
+    public OrderItemDto findById(int id){
+        return toDto(findOrderItemById(id));
+    }
+    @Override
+    public OrderItemDto save(OrderItem orderItem){
+        return toDto(repository.save(orderItem));
     }
 
 }

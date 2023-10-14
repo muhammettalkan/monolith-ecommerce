@@ -1,6 +1,7 @@
 package com.alkan.monobackend.controllers;
 
 import com.alkan.monobackend.dtos.ShopDto;
+import com.alkan.monobackend.request.CreateShopCategoryRequest;
 import com.alkan.monobackend.responses.ShopResponse;
 import com.alkan.monobackend.services.ShopService;
 import com.alkan.monobackend.services.serviceImpl.ShopServiceImpl;
@@ -23,7 +24,7 @@ public class ShopController {
     public ResponseEntity<ShopResponse> create(@RequestBody ShopDto shopDto){
         return ResponseEntity.ok(new ShopResponse(2000,"Shop created", service.create(shopDto)));
     }
-    @GetMapping("/findAll")
+    @GetMapping("/find-all")
     public ResponseEntity<ShopResponse> findAll(){
         return ResponseEntity.ok(new ShopResponse(2000,"Shops found", service.findAll()));
     }
@@ -31,8 +32,8 @@ public class ShopController {
     public String delete(@PathVariable int id){
         return service.delete(id);
     }
-    @GetMapping("/findByCategory/{id}")
-    public ResponseEntity<ShopResponse> findByCategory(@PathVariable String id){
-        return ResponseEntity.ok(new ShopResponse(2000,"Shops found", service.findByCategory(id)));
+    @PostMapping("/add-category")
+    public ResponseEntity<ShopResponse> addCategory(@RequestBody CreateShopCategoryRequest request){
+        return ResponseEntity.ok(new ShopResponse(2000,"Category added", service.addCategory(request)));
     }
 }
