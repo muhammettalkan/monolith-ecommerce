@@ -4,12 +4,14 @@ import com.alkan.monobackend.dtos.OrderDto;
 import com.alkan.monobackend.entities.BasketProduct;
 import com.alkan.monobackend.entities.Order;
 import com.alkan.monobackend.entities.OrderItem;
+import com.alkan.monobackend.entities.Shop;
 import com.alkan.monobackend.exception.custom.ObjectNotFoundException;
 import com.alkan.monobackend.repositories.OrderRepository;
 import com.alkan.monobackend.services.*;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
 @Service
@@ -51,46 +53,54 @@ public class OrderServiceImpl implements OrderService {
         orderDto.shopId = order.getShop().getId();
         return orderDto;
     }
-    @Override
     public List<OrderDto> giveOrder(int basketId) {
         List<OrderDto> orderDtoList = new ArrayList<>();
         List<BasketProduct> basketProducts = basketProductService.listBasketProductsByBasketId(String.valueOf(basketId))
                 .stream()
                 .map(basketProductService::mapToEntity)
                 .toList();
-        while (basketProducts.size() != 0){
+
+        if (basketProducts.isEmpty()) {
+            throw new EntityNotFoundException("Add products to the basket first!");
+        }
+
+        while (!basketProducts.isEmpty()) {
             Order order = saveByShop(basketProducts);
             orderDtoList.add(toDto(order));
         }
+
         return orderDtoList;
     }
 
-    public Order saveByShop(List<BasketProduct> basketProducts){
-        if (basketProducts.size() == 0){
-            return null;
+    public Order saveByShop(List<BasketProduct> basketProducts) {
+        if (basketProducts.isEmpty()) {
+            throw new EntityNotFoundException("Add products to the basket first!");
         }
-        List<Integer> indexes = new ArrayList<>();
-        indexes.add(0);
+
+        BasketProduct firstBasketProduct = basketProducts.get(0);
+        Shop shop = firstBasketProduct.getProduct().getShopCategory().getShop();
+
         Order order = new Order();
-        order.setShop(basketProducts.get(0).getProduct().getShopCategory().getShop());
-        order.setBasket(basketProducts.get(0).getBasket());
-        OrderItem initialItem = new OrderItem();
-        initialItem.setOrder(order);
-        initialItem.setBasketProduct(basketProducts.get(0));
-        order.getOrderItemList().add(initialItem);
-        for (int i = 1; i < basketProducts.size(); i++){
-            if (basketProducts.get(i).getProduct().getShopCategory().getShop() == basketProducts.get(0).getProduct().getShopCategory().getShop()){
+        order.setShop(shop);
+        order.setBasket(firstBasketProduct.getBasket());
+
+        List<OrderItem> orderItems = new ArrayList<>();
+
+        for (BasketProduct basketProduct : basketProducts) {
+            if (basketProduct.getProduct().getShopCategory().getShop() == shop) {
                 OrderItem orderItem = new OrderItem();
                 orderItem.setOrder(order);
-                orderItem.setBasketProduct(basketProducts.get(i));
-                order.getOrderItemList().add(orderItem);
-                indexes.add(i);
+                orderItem.setBasketProduct(basketProduct);
+                orderItems.add(orderItem);
             }
         }
+
+        order.getOrderItemList().addAll(orderItems);
+
         repository.save(order);
-        for (int i = 0; i < indexes.size(); i++){
-            basketProducts.remove(indexes.get(i));
-        }
+
+        basketProducts.removeAll(orderItems);
+
         return order;
     }
 

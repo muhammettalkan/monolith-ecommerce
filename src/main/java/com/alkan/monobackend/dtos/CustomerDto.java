@@ -1,8 +1,5 @@
 package com.alkan.monobackend.dtos;
 
-
-import jakarta.annotation.Nullable;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -14,7 +11,6 @@ public class CustomerDto implements Serializable {
     public String email;
     public String password;
     public String address;
-    @Nullable
     public List<BasketDto> basketList;
 
     public CustomerDto() {

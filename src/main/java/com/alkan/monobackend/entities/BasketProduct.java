@@ -1,7 +1,8 @@
 package com.alkan.monobackend.entities;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
+
+import javax.persistence.*;
 
 @Entity
 public class BasketProduct {

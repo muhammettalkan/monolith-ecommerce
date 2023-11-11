@@ -1,7 +1,8 @@
 package com.alkan.monobackend.entities;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
+import javax.persistence.Entity;
 import java.util.List;
 
 @Entity

@@ -1,7 +1,5 @@
 package com.alkan.monobackend.dtos;
 
-import jakarta.annotation.Nullable;
-
 import java.io.Serializable;
 
 public class BasketProductDto implements Serializable {
@@ -15,7 +13,7 @@ public class BasketProductDto implements Serializable {
     public BasketProductDto() {
     }
 
-    public BasketProductDto(int id, int basketId, int productId, int quantity, @Nullable double amount) {
+    public BasketProductDto(int id, int basketId, int productId, int quantity, double amount) {
         this.id = id;
         this.basketId = basketId;
         this.productId = productId;
